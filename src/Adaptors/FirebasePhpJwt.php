@@ -19,16 +19,10 @@ namespace Okta\JwtVerifier\Adaptors;
 
 use Firebase\JWT\JWT as FirebaseJWT;
 use Okta\JwtVerifier\Jwt;
-use Okta\JwtVerifier\Request;
 use UnexpectedValueException;
 
-class FirebasePhpJwt implements Adaptor
+abstract class FirebasePhpJwt implements Adaptor
 {
-    /**
-     * @var Request
-     */
-    private $request;
-
     /**
      * Leeway in seconds
      *
@@ -36,16 +30,9 @@ class FirebasePhpJwt implements Adaptor
      */
     private $leeway;
 
-    public function __construct(Request $request = null, int $leeway = 120)
+    public function __construct(int $leeway = 120)
     {
-        $this->request = $request ?: new Request();
         $this->leeway = $leeway;
-    }
-
-    public function getKeys($jku)
-    {
-        $keys = json_decode($this->request->setUrl($jku)->get()->getBody()->getContents());
-        return self::parseKeySet($keys);
     }
 
     public function decode($jwt, $keys): Jwt

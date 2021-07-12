@@ -33,11 +33,6 @@ class JwtVerifierBuilder
     protected $nonce;
     protected $leeway = 120;
 
-    public function __construct(Request $request = null)
-    {
-        $this->request = $request;
-    }
-
     /**
      * Sets the issuer URI.
      *
@@ -133,7 +128,6 @@ class JwtVerifierBuilder
             $this->issuer,
             $this->discovery,
             $this->adaptor,
-            $this->request,
             $this->leeway,
             [
                 'nonce' => $this->nonce,

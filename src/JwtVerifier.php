@@ -17,11 +17,6 @@
 
 namespace Okta\JwtVerifier;
 
-use Http\Client\Common\PluginClient;
-use Http\Client\HttpClient;
-use Http\Discovery\HttpClientDiscovery;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Discovery\UriFactoryDiscovery;
 use Okta\JwtVerifier\Adaptors\Adaptor;
 use Okta\JwtVerifier\Adaptors\AutoDiscover;
 use Okta\JwtVerifier\Discovery\DiscoveryMethod;
@@ -63,24 +58,25 @@ class JwtVerifier
         string $issuer,
         DiscoveryMethod $discovery = null,
         Adaptor $adaptor = null,
-        Request $request = null,
         int $leeway = 120,
         array $claimsToValidate = []
     ) {
         $this->issuer = $issuer;
         $this->discovery = $discovery ?: new Oauth;
         $this->adaptor = $adaptor ?: AutoDiscover::getAdaptor();
-        $request = $request ?: new Request;
         $this->wellknown = $this->issuer.$this->discovery->getWellKnown();
-        $this->metaData = json_decode($request->setUrl($this->wellknown)->get()
-            ->getBody());
 
         $this->claimsToValidate = $claimsToValidate;
     }
 
-    public function getIssuer()
+    public function setMetaData($metaData)
     {
-        return $this->issuer;
+        $this->metaData = $metaData;
+    }
+
+    public function getWellKnown(): string
+    {
+        return $this->wellknown;
     }
 
     public function getDiscovery()

@@ -25,12 +25,6 @@ class AutoDiscover
 
     public static function getAdaptor()
     {
-        foreach(self::$adaptors as $adaptor) {
-            if($adaptor::isPackageAvailable()) {
-                return new $adaptor();
-            }
-        }
-
         throw new \Exception(
             'Could not discover JWT Library,
             Please make sure one is included and the Adaptor is used'
