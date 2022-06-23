@@ -18,6 +18,7 @@
 namespace Okta\JwtVerifier\Adaptors;
 
 use Firebase\JWT\JWT as FirebaseJWT;
+use Firebase\JWT\Key;
 use Okta\JwtVerifier\Jwt;
 use UnexpectedValueException;
 
@@ -106,7 +107,7 @@ abstract class FirebasePhpJwt implements Adaptor
                     $pem = self::createPemFromModulusAndExponent($source['n'], $source['e']);
                     $pKey = openssl_pkey_get_public($pem);
                     if ($pKey !== false)
-                        return $pKey;
+                        return new Key($pem, $source['alg']);
                     break;
                 default:
                     //Currently only RSA is supported
